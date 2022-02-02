@@ -3,12 +3,15 @@ const cards = document.getElementById('cards');
 const templateCard = document.getElementById('template-card').content;
 const items = document.getElementById('items');
 const footer = document.getElementById('footer');
-const templateFooter = document.getElementById('template-footer').content
-const templateCarrito = document.getElementById('template-carrito').content
+const templateFooter = document.getElementById('template-footer').content;
+const templateCarrito = document.getElementById('template-carrito').content;
 const fragment = document.createDocumentFragment();
+
 let carrito = {
 
 }
+
+
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -22,6 +25,9 @@ document.addEventListener('DOMContentLoaded', () => {
 cards.addEventListener('click', e => {
     addCarrito(e)
 })
+
+
+
 
 
 const fetchData = async() => {
@@ -49,9 +55,8 @@ const pintarCards = data => {
         templateCard.querySelector('p').textContent = producto.DISPLAY.USD.PRICE
         templateCard.querySelector('#img').innerHTML = `<img src="https://www.cryptocompare.com${producto.CoinInfo.ImageUrl}" alt="" class="card-img-top">`
             //templateCard.querySelector('img').setAttribute = ("src", + producto.CoinInfo.ImageUrl)
-            // templateCard.querySelector('.btn-dark').dataset.id = producto.CoinInfo.Name
+        templateCard.querySelector('.btn-dark').dataset.id = producto.CoinInfo.Id
 
-        console.log('https://www.cryptocompare.com/' + producto.CoinInfo.ImageUrl)
         const clone = templateCard.cloneNode(true)
         fragment.appendChild(clone);
 
@@ -70,34 +75,49 @@ const addCarrito = e => {
 }
 
 const setCarrito = objeto => {
-    // console.log(objeto)
+    //console.log(objeto)
     const producto = {
-        symbol: objeto.querySelector('.btn-dark').dataset.id,
-        lastPrice: objeto.querySelector('p').textContent,
-        cantidad: 1
-    }
-    if (carrito.hasOwnProperty(productoCoinInfo.Name)) {
-        producto.cantidad = carrito[productoCoinInfo.Name].cantidad + 1
+        Id: objeto.querySelector('.btn-dark').dataset.id,
+        FullName: objeto.querySelector('h5').textContent,
+        PRICE: objeto.querySelector('p').textContent,
+        cantidad: ''
     }
 
-    carrito[productoCoinInfo.Name] = {...producto }
+
+
+    carrito[producto.FullName] = {...producto }
     pintarCarrito();
+    // console.log(producto.PRICE)
+    //
+
+
 }
 
+
+
 const pintarCarrito = () => {
-    console.log(carrito)
+
     items.innerHTML = ''
+
+
     Object.values(carrito).forEach(producto => {
-        templateCarrito.querySelector('th').textContent = productoCoinInfo.Name
-        templateCarrito.querySelectorAll('td')[0].textContent = productoCoinInfo.Name
-        templateCarrito.querySelectorAll('td')[1].textContent = producto.cantidad
-        templateCarrito.querySelector('.btn-info').datasetCoinInfo.Name = productoCoinInfo.Name
-        templateCarrito.querySelector('.btn-danger').datasetCoinInfo.Name = productoCoinInfo.Name
-        templateCarrito.querySelector('span').textContent = producto.cantidad * producto.lastPrice
+
+
+        templateCarrito.querySelector('th').textContent = producto.Id
+        templateCarrito.querySelectorAll('td')[0].textContent = producto.FullName
+        templateCarrito.querySelector('span').textContent = producto.PRICE
+
+
+
+
+
 
         const clone = templateCarrito.cloneNode(true)
         fragment.appendChild(clone)
+
+
     })
+
 
     items.appendChild(fragment)
 
@@ -117,8 +137,8 @@ const pintarFooter = () => {
 
     const nCantidad = Object.values(carrito).reduce((acc, { cantidad }) => acc + cantidad, 0)
 
-    const nPrecio = Object.values(carrito).reduce((acc, { cantidad, lastPrice }) => acc + cantidad * lastPrice, 0)
-    console.log(nPrecio)
+    const nPrecio = Object.values(carrito).reduce((acc, { cantidad, PRICE }) => PRICE, 0)
+        //console.log(nPrecio)
 
     templateFooter.querySelectorAll('td')[0].textContent = nCantidad
     templateFooter.querySelector('span').textContent = nPrecio
@@ -136,5 +156,3 @@ const pintarFooter = () => {
 
 
 }
-
-console.log(templateCard)
